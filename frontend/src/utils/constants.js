@@ -31,25 +31,60 @@ export const PREDICTION_FIELDS = [
   { name: 'glucose', label: 'Đường huyết', type: 'number', min: 30, max: 500, unit: 'mg/dL', tooltip: 'Nồng độ glucose trong máu (bình thường khi đói: 70-100 mg/dL)' },
 ];
 
+/*
+ * KHUYẾN NGHỊ SỨC KHỎE TIM MẠCH
+ * Các khuyến nghị được xây dựng dựa trên hướng dẫn từ các tổ chức y tế uy tín:
+ *
+ * [1] AHA (American Heart Association) - "Recommendations for Physical Activity in Adults and Kids"
+ *     https://www.heart.org/en/healthy-living/fitness/fitness-basics/aha-recs-for-physical-activity-in-adults
+ *
+ * [2] ACC/AHA (American College of Cardiology / AHA) - "2017 Guideline for High Blood Pressure in Adults"
+ *     Whelton PK, et al. J Am Coll Cardiol. 2018;71(19):e127-e248
+ *     Ngưỡng huyết áp bình thường: < 120/80 mmHg
+ *
+ * [3] AHA/ACC - "2019 ACC/AHA Guideline on Primary Prevention of Cardiovascular Disease"
+ *     Arnett DK, et al. Circulation. 2019;140(11):e596-e646
+ *     Khuyến nghị chế độ ăn DASH, giảm muối < 2300mg/ngày, tăng rau xanh & omega-3
+ *
+ * [4] WHO (World Health Organization) - "Cardiovascular diseases: Avoiding heart attacks and strokes"
+ *     https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)
+ *     Khám sức khỏe định kỳ, theo dõi các yếu tố nguy cơ
+ *
+ * [5] CDC (Centers for Disease Control and Prevention) - "Smoking and Heart Disease"
+ *     https://www.cdc.gov/tobacco/about/smoking-and-heart-disease.html
+ *     Hút thuốc tăng nguy cơ bệnh tim mạch gấp 2-4 lần
+ *
+ * [6] National Sleep Foundation - "How Sleep Affects Your Heart"
+ *     Khuyến nghị ngủ 7-9 tiếng/đêm cho người trưởng thành (18-64 tuổi)
+ *     Hirshkowitz M, et al. Sleep Health. 2015;1(1):40-43
+ *
+ * [7] Framingham Heart Study - Nguồn dữ liệu huấn luyện mô hình AI
+ *     Dawber TR, Meadors GF, Moore FE. Epidemiological approaches to heart disease.
+ *     Am J Public Health. 1951;41(3):279-286
+ *     Các yếu tố nguy cơ: tuổi, giới tính, huyết áp, cholesterol, hút thuốc, tiểu đường, BMI
+ */
 export const RECOMMENDATIONS = {
+  // Nguy cơ CAO (≥ 60%) — Khuyến nghị can thiệp tích cực
   high: [
-    { icon: 'Activity', title: 'Tập thể dục đều đặn', desc: 'Tối thiểu 30 phút/ngày, 5 ngày/tuần. Chọn các bài tập nhẹ nhàng như đi bộ, bơi lội.' },
-    { icon: 'Heart', title: 'Kiểm soát huyết áp', desc: 'Đo huyết áp thường xuyên, duy trì dưới 120/80 mmHg. Tuân thủ thuốc nếu có chỉ định.' },
-    { icon: 'Apple', title: 'Chế độ ăn lành mạnh', desc: 'Giảm muối, chất béo bão hòa. Tăng rau xanh, trái cây, cá, ngũ cốc nguyên hạt.' },
-    { icon: 'Calendar', title: 'Khám sức khỏe định kỳ', desc: 'Khám tim mạch mỗi 3-6 tháng, xét nghiệm máu, đo ECG theo chỉ định bác sĩ.' },
-    { icon: 'Ban', title: 'Ngưng hút thuốc', desc: 'Hút thuốc lá tăng nguy cơ bệnh tim gấp 2-4 lần. Hãy tìm sự hỗ trợ cai thuốc.' },
-    { icon: 'Moon', title: 'Ngủ đủ giấc', desc: 'Ngủ 7-8 tiếng mỗi đêm, duy trì thời gian ngủ đều đặn, hạn chế stress.' },
+    { icon: 'Activity', title: 'Tập thể dục đều đặn', desc: 'Tối thiểu 30 phút/ngày, 5 ngày/tuần. Chọn các bài tập nhẹ nhàng như đi bộ, bơi lội.', sourceLabel: 'AHA - Physical Activity Guidelines', sourceUrl: 'https://www.heart.org/en/healthy-living/fitness/fitness-basics/aha-recs-for-physical-activity-in-adults' },
+    { icon: 'Heart', title: 'Kiểm soát huyết áp', desc: 'Đo huyết áp thường xuyên, duy trì dưới 120/80 mmHg. Tuân thủ thuốc nếu có chỉ định.', sourceLabel: 'ACC/AHA 2017 - Guideline for High Blood Pressure', sourceUrl: 'https://www.ahajournals.org/doi/10.1161/HYP.0000000000000065' },
+    { icon: 'Apple', title: 'Chế độ ăn lành mạnh', desc: 'Giảm muối (< 2300mg/ngày), chất béo bão hòa. Tăng rau xanh, trái cây, cá, ngũ cốc nguyên hạt theo chế độ DASH.', sourceLabel: 'AHA/ACC 2019 - Primary Prevention Guideline', sourceUrl: 'https://www.ahajournals.org/doi/10.1161/CIR.0000000000000678' },
+    { icon: 'Calendar', title: 'Khám sức khỏe định kỳ', desc: 'Khám tim mạch mỗi 3-6 tháng, xét nghiệm máu, đo ECG theo chỉ định bác sĩ.', sourceLabel: 'WHO - Cardiovascular Diseases', sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)' },
+    { icon: 'Ban', title: 'Ngưng hút thuốc', desc: 'Hút thuốc lá tăng nguy cơ bệnh tim gấp 2-4 lần. Hãy tìm sự hỗ trợ cai thuốc.', sourceLabel: 'CDC - Smoking and Heart Disease', sourceUrl: 'https://www.cdc.gov/tobacco/about/smoking-and-heart-disease.html' },
+    { icon: 'Moon', title: 'Ngủ đủ giấc', desc: 'Ngủ 7-9 tiếng mỗi đêm, duy trì thời gian ngủ đều đặn, hạn chế stress.', sourceLabel: 'National Sleep Foundation', sourceUrl: 'https://pubmed.ncbi.nlm.nih.gov/29073412/' },
   ],
+  // Nguy cơ TRUNG BÌNH (30% - 59%) — Khuyến nghị phòng ngừa
   medium: [
-    { icon: 'Activity', title: 'Tăng cường vận động', desc: 'Duy trì hoạt động thể chất ít nhất 150 phút/tuần ở cường độ vừa phải.' },
-    { icon: 'Heart', title: 'Theo dõi huyết áp', desc: 'Kiểm tra huyết áp định kỳ, ghi nhận các thay đổi bất thường.' },
-    { icon: 'Apple', title: 'Cải thiện chế độ ăn', desc: 'Hạn chế thực phẩm chế biến sẵn, tăng cường rau xanh và omega-3.' },
-    { icon: 'Calendar', title: 'Khám sức khỏe', desc: 'Khám sức khỏe tổng quát mỗi 6-12 tháng để theo dõi các chỉ số.' },
+    { icon: 'Activity', title: 'Tăng cường vận động', desc: 'Duy trì hoạt động thể chất ít nhất 150 phút/tuần ở cường độ vừa phải.', sourceLabel: 'AHA - Physical Activity Guidelines', sourceUrl: 'https://www.heart.org/en/healthy-living/fitness/fitness-basics/aha-recs-for-physical-activity-in-adults' },
+    { icon: 'Heart', title: 'Theo dõi huyết áp', desc: 'Kiểm tra huyết áp định kỳ, ghi nhận các thay đổi bất thường.', sourceLabel: 'ACC/AHA 2017 - Guideline for High Blood Pressure', sourceUrl: 'https://www.ahajournals.org/doi/10.1161/HYP.0000000000000065' },
+    { icon: 'Apple', title: 'Cải thiện chế độ ăn', desc: 'Hạn chế thực phẩm chế biến sẵn, tăng cường rau xanh và omega-3.', sourceLabel: 'AHA/ACC 2019 - Primary Prevention Guideline', sourceUrl: 'https://www.ahajournals.org/doi/10.1161/CIR.0000000000000678' },
+    { icon: 'Calendar', title: 'Khám sức khỏe', desc: 'Khám sức khỏe tổng quát mỗi 6-12 tháng để theo dõi các chỉ số.', sourceLabel: 'WHO - Cardiovascular Diseases', sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)' },
   ],
+  // Nguy cơ THẤP (< 30%) — Khuyến nghị duy trì
   low: [
-    { icon: 'ThumbsUp', title: 'Duy trì lối sống lành mạnh', desc: 'Tiếp tục giữ thói quen tốt hiện tại về ăn uống và tập luyện.' },
-    { icon: 'Activity', title: 'Vận động thường xuyên', desc: 'Duy trì hoạt động thể chất đều đặn để giữ sức khỏe tim mạch.' },
-    { icon: 'Calendar', title: 'Khám định kỳ hàng năm', desc: 'Khám sức khỏe tổng quát mỗi năm một lần để phát hiện sớm bất thường.' },
+    { icon: 'ThumbsUp', title: 'Duy trì lối sống lành mạnh', desc: 'Tiếp tục giữ thói quen tốt hiện tại về ăn uống và tập luyện.', sourceLabel: 'AHA/ACC 2019 - Primary Prevention Guideline', sourceUrl: 'https://www.ahajournals.org/doi/10.1161/CIR.0000000000000678' },
+    { icon: 'Activity', title: 'Vận động thường xuyên', desc: 'Duy trì hoạt động thể chất đều đặn để giữ sức khỏe tim mạch.', sourceLabel: 'AHA - Physical Activity Guidelines', sourceUrl: 'https://www.heart.org/en/healthy-living/fitness/fitness-basics/aha-recs-for-physical-activity-in-adults' },
+    { icon: 'Calendar', title: 'Khám định kỳ hàng năm', desc: 'Khám sức khỏe tổng quát mỗi năm một lần để phát hiện sớm bất thường.', sourceLabel: 'WHO - Cardiovascular Diseases', sourceUrl: 'https://www.who.int/news-room/fact-sheets/detail/cardiovascular-diseases-(cvds)' },
   ],
 };
 

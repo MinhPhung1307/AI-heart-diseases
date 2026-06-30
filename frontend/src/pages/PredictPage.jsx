@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Heart, Activity, Send, RotateCcw, AlertCircle, Info,
   Shield, TrendingUp, Stethoscope, Loader2, CheckCircle2,
-  Ban, Apple, Calendar, Moon, ThumbsUp, ChevronDown, ChevronUp
+  Ban, Apple, Calendar, Moon, ThumbsUp, ChevronDown, ChevronUp, ExternalLink
 } from 'lucide-react';
 import { PREDICTION_FIELDS, RECOMMENDATIONS, getRiskLevel } from '../utils/constants';
 import { validatePredictionForm } from '../utils/validators';
@@ -352,6 +352,17 @@ const PredictPage = () => {
                             <div>
                               <p className="text-sm font-semibold text-text-primary">{rec.title}</p>
                               <p className="text-xs text-text-secondary mt-0.5 leading-relaxed">{rec.desc}</p>
+                              {rec.sourceUrl && (
+                                <a
+                                  href={rec.sourceUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-xs text-secondary hover:text-secondary-dark mt-1 transition-colors hover:underline"
+                                >
+                                  <ExternalLink className="w-3 h-3" />
+                                  {rec.sourceLabel || 'Xem nguồn'}
+                                </a>
+                              )}
                             </div>
                           </motion.div>
                         );

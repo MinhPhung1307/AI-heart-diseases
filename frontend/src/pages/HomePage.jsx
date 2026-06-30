@@ -3,42 +3,13 @@ import { motion } from 'framer-motion';
 import {
   Heart, ArrowRight, Shield, Sparkles, Activity,
   Zap, BarChart3, Clock, Brain, Database,
-  Users, Target, FileCheck, MessageCircle,
+  Target, FileCheck, MessageCircle,
   ChevronRight, Star, Check
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useEffect, useState, useRef } from 'react';
-import { STATS } from '../utils/constants';
 
-/* ───── Animated Counter Hook ───── */
-const useCountUp = (end, duration = 2000) => {
-  const [count, setCount] = useState(0);
-  const [started, setStarted] = useState(false);
-  const ref = useRef(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setStarted(true); },
-      { threshold: 0.3 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!started) return;
-    let start = 0;
-    const increment = end / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= end) { setCount(end); clearInterval(timer); }
-      else setCount(Math.floor(start));
-    }, 16);
-    return () => clearInterval(timer);
-  }, [started, end, duration]);
-
-  return [count, ref];
-};
 
 /* ───── Fade-in Section Wrapper ───── */
 const FadeInSection = ({ children, className = '', delay = 0 }) => (
@@ -424,59 +395,6 @@ const HowItWorks = () => {
   );
 };
 
-/* ═══════════════════════════════════════════════════ */
-/*  STATISTICS SECTION                                */
-/* ═══════════════════════════════════════════════════ */
-const StatisticsSection = () => {
-  const [predictions, predRef] = useCountUp(STATS.predictions, 2500);
-  const [users, usersRef] = useCountUp(STATS.users, 2000);
-  const [accuracy, accRef] = useCountUp(STATS.accuracy, 1500);
-  const [records, recRef] = useCountUp(STATS.records, 2500);
-
-  const stats = [
-    { ref: predRef, value: predictions.toLocaleString(), suffix: '+', label: 'Lượt dự đoán', icon: Activity, color: 'text-primary' },
-    { ref: usersRef, value: users.toLocaleString(), suffix: '+', label: 'Người dùng', icon: Users, color: 'text-secondary' },
-    { ref: accRef, value: accuracy.toFixed(1), suffix: '%', label: 'Độ chính xác', icon: Target, color: 'text-green-500' },
-    { ref: recRef, value: records.toLocaleString(), suffix: '+', label: 'Hồ sơ lưu trữ', icon: Database, color: 'text-purple-500' },
-  ];
-
-  return (
-    <section className="section-padding bg-white">
-      <div className="container-custom">
-        <FadeInSection>
-          <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-8 sm:p-12 lg:p-16 relative overflow-hidden">
-            {/* Decorative */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl" />
-
-            <div className="text-center mb-12 relative z-10">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
-                Con số ấn tượng
-              </h2>
-              <p className="text-gray-400 text-lg">
-                HeartAI đang được tin dùng bởi hàng ngàn người
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
-              {stats.map((stat, i) => (
-                <div key={i} ref={stat.ref} className="text-center">
-                  <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-4">
-                    <stat.icon className={`w-7 h-7 ${stat.color}`} />
-                  </div>
-                  <p className="text-3xl sm:text-4xl font-extrabold text-white mb-1">
-                    {stat.value}{stat.suffix}
-                  </p>
-                  <p className="text-gray-400 text-sm">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </FadeInSection>
-      </div>
-    </section>
-  );
-};
 
 /* ═══════════════════════════════════════════════════ */
 /*  CTA SECTION                                       */
@@ -530,7 +448,7 @@ const HomePage = () => {
       <AboutAISection />
       <FeaturesSection />
       <HowItWorks />
-      <StatisticsSection />
+
       <CTASection />
     </>
   );
